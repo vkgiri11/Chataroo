@@ -2,7 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 
-import {chats} from './utils/sample_data.js';
+import { chats } from './utils/sample_data.js';
 
 const app = express();
 dotenv.config();
@@ -12,10 +12,6 @@ app.use(express.urlencoded({ limit: '30mb', extended: true }));
 app.use(cors());
 
 const PORT = process.env.PORT || 5000;
-
-app.get('/', (req, res) => {
-	res.send('Server Running');
-});
 
 app.get('/api/chats', (req, res) => {
 	res.send(chats);
