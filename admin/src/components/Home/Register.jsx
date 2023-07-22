@@ -14,6 +14,7 @@ const Register = () => {
 		name: '',
 		email: '',
 		password: '',
+		pic: '',
 		confirmPassword: '',
 		showPassword: false,
 	});
@@ -103,4 +104,4 @@ const Register = () => {
 	);
 };
 export default Register;
-IeWfwCYcht5RRsqj
+IeWfwCYcht5RRsqj;
