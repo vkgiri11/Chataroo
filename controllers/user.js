@@ -1,9 +1,16 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import { v2 as cloudinary } from "cloudinary";
 
 import UserModal from '../models/user.js';
 
 dotenv.config();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 export const registerUser = async (req, res) => {
 	const { name, email, password, pic } = req.body;
@@ -16,11 +23,13 @@ export const registerUser = async (req, res) => {
 
 		if (existingUser) return res.status(400).json({ message: 'User already exists' });
 
+    const photoUrl = await cloudinary.uploader.upload(pic);
+
 		const result = await UserModal.create({
 			email,
 			password,
 			name,
-			pic,
+			pic: photoUrl.url,
 		});
 
 		const token = jwt.sign({ email: result.email, id: result._id }, process.env.JWT_SECRET, {
