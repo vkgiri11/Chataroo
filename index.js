@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import mongoose from 'mongoose';
 
 import { chats } from './utils/sample_data.js';
 
@@ -22,4 +23,16 @@ app.get('/api/chats/:id', (req, res) => {
 	res.send(req_chat);
 });
 
-app.listen(PORT, () => console.log('Server Running!!!'));
+mongoose
+	.connect(process.env.CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+	.then(() =>
+		app.listen(PORT, () => console.log(`Server Running on Port: http://localhost:${PORT}`))
+	)
+	.catch((error) => {
+		console.log(`${error} did not connect`);
+		process.exit();
+	});
+
+app.get('/', (req, res) => {
+	res.send('App is Running !!');
+});
