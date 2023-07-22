@@ -1,0 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700&display=swap');
+
+.main-container {
+  min-height: 100vh;
+  display: flex;
+  background-image: url('./assets/chat_bg.png');
+  background-size: cover;
+  background-position: center;
+  color: #28282B
+}

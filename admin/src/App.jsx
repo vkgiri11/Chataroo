@@ -1,20 +1,22 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
+import './App.css';
 
 import { setAxiosDefault } from './axiosDefaults';
-
-import HomePage from './components/HomePage';
-import ChatsPage from './components/ChatsPage';
+import ChatsPage from './components/Chats';
+import HomePage from './components/Home';
 
 function App() {
 	setAxiosDefault();
 
 	return (
 		<>
-			<Routes>
-				<Route path="*" element={<Navigate to="/home" replace />} />
-				<Route path="home" element={<HomePage />} />
-				<Route path="chats" element={<ChatsPage />} />
-			</Routes>
+			<div className="main-container">
+				<Routes>
+					<Route path="*" element={<Navigate to="/home" replace />} />
+					<Route path="home" element={<HomePage />} />
+					<Route path="chats" element={<ChatsPage />} />
+				</Routes>
+			</div>
 		</>
 	);
 }

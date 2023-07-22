@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-import { asyncWrap } from '../utils';
+import { asyncWrap } from '../../utils';
 
-const ChatsPage = () => {
+const index = () => {
 	const [chats, setChats] = useState([]);
 
 	const fetchChatsData = async () => {
@@ -29,4 +29,4 @@ const ChatsPage = () => {
 		</>
 	);
 };
-export default ChatsPage;
+export default index;
