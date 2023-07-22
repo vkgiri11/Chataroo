@@ -6,10 +6,12 @@ import {
 	Input,
 	InputGroup,
 	InputRightElement,
+	useToast,
 	VStack,
 } from '@chakra-ui/react';
 
 const Register = () => {
+	const [loading, setLoading] = useState(false);
 	const [formData, setFormData] = useState({
 		name: '',
 		email: '',
@@ -18,8 +20,39 @@ const Register = () => {
 		confirmPassword: '',
 		showPassword: false,
 	});
+	const toast = useToast();
 
-	const uploadPicture = () => {};
+	const uploadPicture = (file) => {
+		setLoading(true);
+
+		if (!file) {
+			toast({
+				title: 'Please select an image !!',
+				status: 'warning',
+				duration: 2000,
+				isClosable: true,
+			});
+
+			return;
+		}
+
+		const reader = (readFile) =>
+			new Promise((resolve, reject) => {
+				const fileReader = new FileReader();
+				fileReader.onload = () => resolve(fileReader.result);
+				fileReader.readAsDataURL(readFile);
+			});
+
+		reader(file)
+			.then((result) => {
+				setPostData((prev) => ({ ...prev, pic: result }));
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+
+		setLoading(false);
+	};
 
 	const submitHandler = () => {};
 
@@ -92,11 +125,16 @@ const Register = () => {
 					<Input
 						type="file"
 						p={1.5}
-						accept="image/*"
+						accept=".png, .jpg, .jpeg"
 						onChange={(e) => uploadPicture(e.target.files[0])}
 					/>
 				</FormControl>
-				<Button colorScheme="blue" width="100%" style={{ marginTop: 15 }} onClick={submitHandler}>
+				<Button
+					colorScheme="blue"
+					width="100%"
+					style={{ marginTop: 15 }}
+					isLoading={loading}
+					onClick={submitHandler}>
 					Register
 				</Button>
 			</VStack>
@@ -104,4 +142,3 @@ const Register = () => {
 	);
 };
 export default Register;
-IeWfwCYcht5RRsqj;
