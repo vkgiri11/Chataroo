@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import {
 	Button,
 	FormControl,
@@ -6,8 +8,11 @@ import {
 	Input,
 	InputGroup,
 	InputRightElement,
+	useToast,
 	VStack,
 } from '@chakra-ui/react';
+
+import { asyncWrap, emptyCheck } from '../../utils';
 
 const Login = () => {
 	const [formData, setFormData] = useState({
@@ -15,8 +20,56 @@ const Login = () => {
 		password: '',
 		showPassword: false,
 	});
+	const [loading, setLoading] = useState(false);
+	const toast = useToast();
 
-	const submitHandler = () => {};
+	const navigateTo = useNavigate();
+
+	const submitHandler = async () => {
+		setLoading(true);
+
+		if (emptyCheck(formData)) {
+			toast({
+				title: 'Please fill in all details.',
+				status: 'warning',
+				duration: 2000,
+				position: 'bottom',
+				isClosable: true,
+			});
+
+			setLoading(false);
+			return;
+		}
+
+		const [res, err] = await asyncWrap(axios.post('user/login', formData));
+
+		if (err) {
+			console.log(err);
+			toast({
+				title: 'Something went wrong.',
+				description: err.response.data.message,
+				status: 'warning',
+				duration: 2000,
+				position: 'bottom',
+				isClosable: true,
+			});
+
+			setLoading(false);
+			return;
+		}
+
+		toast({
+			title: 'Login Successfull.',
+			status: 'success',
+			duration: 2000,
+			position: 'bottom',
+			isClosable: true,
+		});
+
+		localStorage.setItem('loggedUserInfo', JSON.stringify(res.data));
+		setLoading(false);
+		navigateTo('chats');
+	};
 
 	return (
 		<>
@@ -51,7 +104,12 @@ const Login = () => {
 						</InputRightElement>
 					</InputGroup>
 				</FormControl>
-				<Button colorScheme="blue" width="100%" style={{ marginTop: 15 }} onClick={submitHandler}>
+				<Button
+					colorScheme="blue"
+					width="100%"
+					style={{ marginTop: 15 }}
+					isLoading={loading}
+					onClick={submitHandler}>
 					Log In
 				</Button>
 				<Button

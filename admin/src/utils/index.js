@@ -8,3 +8,15 @@ export function getUrl() {
 export function asyncWrap(promise) {
 	return promise.then((result) => [result]).catch((err) => [null, err]);
 }
+
+export const emptyCheck = (data, excluding) => {
+	for (let item in data) {
+		if (excluding?.includes(item)) continue;
+
+		if (data[item] === '') {
+			return true;
+		}
+	}
+
+	return false;
+};

@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import {
 	Button,
 	FormControl,
@@ -9,6 +11,8 @@ import {
 	useToast,
 	VStack,
 } from '@chakra-ui/react';
+
+import { asyncWrap, emptyCheck } from '../../utils';
 
 const Register = () => {
 	const [loading, setLoading] = useState(false);
@@ -22,19 +26,10 @@ const Register = () => {
 	});
 	const toast = useToast();
 
+	const navigateTo = useNavigate();
+
 	const uploadPicture = (file) => {
 		setLoading(true);
-
-		if (!file) {
-			toast({
-				title: 'Please select an image !!',
-				status: 'warning',
-				duration: 2000,
-				isClosable: true,
-			});
-
-			return;
-		}
 
 		const reader = (readFile) =>
 			new Promise((resolve, reject) => {
@@ -45,16 +40,75 @@ const Register = () => {
 
 		reader(file)
 			.then((result) => {
-				setPostData((prev) => ({ ...prev, pic: result }));
+				setFormData((prev) => ({ ...prev, pic: result }));
+				setLoading(false);
 			})
 			.catch((err) => {
 				console.log(err);
+				setLoading(false);
 			});
-
-		setLoading(false);
 	};
 
-	const submitHandler = () => {};
+	const submitHandler = async () => {
+		setLoading(true);
+
+		if (emptyCheck(formData, ['pic'])) {
+			toast({
+				title: 'Please fill in all details.',
+				status: 'warning',
+				duration: 2000,
+				position: 'bottom',
+				isClosable: true,
+			});
+
+			setLoading(false);
+			return;
+		}
+
+		if (formData.password !== formData.confirmPassword) {
+			toast({
+				title: 'Passwords do not match.',
+				status: 'warning',
+				duration: 2000,
+				position: 'bottom',
+				isClosable: true,
+			});
+
+			setLoading(false);
+			return;
+		}
+
+		const { confirmPassword, ...payload } = formData;
+
+		const [res, err] = await asyncWrap(axios.post('user/register', payload));
+
+		if (err) {
+			console.log(err);
+			toast({
+				title: 'Something went wrong.',
+        description: err.response.data.message,
+				status: 'warning',
+				duration: 2000,
+				position: 'bottom',
+				isClosable: true,
+			});
+
+			setLoading(false);
+			return;
+		}
+
+		toast({
+			title: 'Registration Successfull.',
+			status: 'success',
+			duration: 2000,
+			position: 'bottom',
+			isClosable: true,
+		});
+
+		localStorage.setItem('loggedUserInfo', JSON.stringify(res.data));
+		setLoading(false);
+		navigateTo('chats');
+	};
 
 	return (
 		<>

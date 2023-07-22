@@ -18,7 +18,7 @@ const index = () => {
 	};
 
 	useEffect(() => {
-		fetchChatsData();
+		// fetchChatsData();
 	}, []);
 
 	return (
