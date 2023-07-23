@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { v2 as cloudinary } from 'cloudinary';
 
-import UserModal from '../models/user.js';
+import UserModel from '../models/userModel.js';
 
 dotenv.config();
 
@@ -19,13 +19,14 @@ export const registerUser = async (req, res) => {
 		return res.status(400).json({ message: 'Please Enter all fields!!' });
 
 	try {
-		const existingUser = await UserModal.findOne({ email });
+		const existingUser = await UserModel.findOne({ email });
 
 		if (existingUser) return res.status(400).json({ message: 'User already exists' });
 
-		const photoUrl = await cloudinary.uploader.upload(pic);
+		let photoUrl;
+    if(pic) photoUrl = await cloudinary.uploader.upload(pic);
 
-		const result = await UserModal.create({
+		const result = await UserModel.create({
 			email,
 			password,
 			name,
@@ -53,7 +54,7 @@ export const loginUser = async (req, res) => {
 	const { email, password } = req.body;
 
 	try {
-		const existingUser = await UserModal.findOne({ email });
+		const existingUser = await UserModel.findOne({ email });
 
 		if (!existingUser) return res.status(404).json({ message: "User doesn't exist" });
 
@@ -93,7 +94,7 @@ export const getUsersBySearch = async (req, res) => {
 			  }
 			: {};
 
-		const users = await UserModal.find(keyword).find({ _id: { $ne: req.user._id } });
+		const users = await UserModel.find(keyword).find({ _id: { $ne: req.user._id } });
 
 		res.json({ data: users });
 	} catch (error) {

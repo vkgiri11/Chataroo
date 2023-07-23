@@ -1,13 +1,13 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
-import UserModal from '../models/user.js';
+import UserModal from '../models/userModel.js';
 
 dotenv.config();
 
 const secret = process.env.JWT_SECRET;
 
-const auth = async (req, res, next) => {
+const authMiddleware = async (req, res, next) => {
 	if (req.headers.authorization && req.headers.authorization.startsWith('Bearer'))
 		try {
 			const token = req.headers.authorization.split(' ')[1];
@@ -23,4 +23,4 @@ const auth = async (req, res, next) => {
 		}
 };
 
-export default auth;
+export default authMiddleware;
