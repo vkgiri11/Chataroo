@@ -1,15 +1,15 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { v2 as cloudinary } from "cloudinary";
+import { v2 as cloudinary } from 'cloudinary';
 
 import UserModal from '../models/user.js';
 
 dotenv.config();
 
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+	cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+	api_key: process.env.CLOUDINARY_API_KEY,
+	api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 export const registerUser = async (req, res) => {
@@ -23,13 +23,13 @@ export const registerUser = async (req, res) => {
 
 		if (existingUser) return res.status(400).json({ message: 'User already exists' });
 
-    const photoUrl = await cloudinary.uploader.upload(pic);
+		const photoUrl = await cloudinary.uploader.upload(pic);
 
 		const result = await UserModal.create({
 			email,
 			password,
 			name,
-			pic: photoUrl.url,
+			pic: pic ? photoUrl.url : undefined,
 		});
 
 		const token = jwt.sign({ email: result.email, id: result._id }, process.env.JWT_SECRET, {
@@ -61,9 +61,13 @@ export const loginUser = async (req, res) => {
 
 		if (!isPasswordCorrect) return res.status(400).json({ message: 'Invalid credentials' });
 
-		const token = jwt.sign({ email: existingUser.email, id: existingUser._id }, process.env.JWT_SECRET, {
-			expiresIn: '30m',
-		});
+		const token = jwt.sign(
+			{ email: existingUser.email, id: existingUser._id },
+			process.env.JWT_SECRET,
+			{
+				expiresIn: '30m',
+			}
+		);
 
 		res.status(200).json({
 			_id: existingUser._id,

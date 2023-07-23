@@ -20,7 +20,7 @@ const Register = () => {
 		name: '',
 		email: '',
 		password: '',
-		pic: '',
+		pic: undefined,
 		confirmPassword: '',
 		showPassword: false,
 	});
@@ -86,7 +86,7 @@ const Register = () => {
 			console.log(err);
 			toast({
 				title: 'Something went wrong.',
-        description: err.response.data.message,
+        description: err.response?.data?.message,
 				status: 'warning',
 				duration: 2000,
 				position: 'bottom',

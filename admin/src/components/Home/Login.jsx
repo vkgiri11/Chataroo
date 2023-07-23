@@ -47,7 +47,7 @@ const Login = () => {
 			console.log(err);
 			toast({
 				title: 'Something went wrong.',
-				description: err.response.data.message,
+				description: err.response?.data?.message,
 				status: 'warning',
 				duration: 2000,
 				position: 'bottom',
