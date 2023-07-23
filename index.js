@@ -7,7 +7,7 @@ import connectDB from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
 
-import { errorHandler, notFound } from './middleware/error.js';
+import { errorHandler, notFound } from './middleware/errorMiddleWare.js';
 
 const app = express();
 dotenv.config();

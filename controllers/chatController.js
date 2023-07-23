@@ -19,7 +19,7 @@ export const accessChat = async (req, res) => {
 			.populate('latestMessage');
 
 		existingChat = await UserModel.populate(existingChat, {
-			path: "latestMessage.sender",
+			path: 'latestMessage.sender',
 			select: 'name pic email',
 		});
 
@@ -39,6 +39,27 @@ export const accessChat = async (req, res) => {
 		);
 
 		return res.status(200).json({ data: createdChat });
+	} catch (error) {
+		res.status(500).json({ message: 'Something went wrong' });
+		console.log(error);
+	}
+};
+
+export const fetchChats = async (req, res) => {
+	try {
+		ChatModel.find({ users: { $elemMatch: { $eq: req.user._id } } })
+			.populate('users', '-password')
+			.populate('groupAdmin', '-password')
+			.populate('latestMessage')
+			.sort({ updatedAt: -1 })
+			.then(async (results) => {
+				results = await UserModel.populate(results, {
+					path: 'latestMessage.sender',
+					select: 'name pic email',
+				});
+
+				res.status(200).send({ data: results });
+			});
 	} catch (error) {
 		res.status(500).json({ message: 'Something went wrong' });
 		console.log(error);

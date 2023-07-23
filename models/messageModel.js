@@ -5,11 +5,11 @@ const messageSchema = mongoose.Schema(
 		content: { type: String, trim: true },
 		sender: {
 			type: mongoose.Schema.Types.ObjectId,
-			ref: 'UserModel',
+			ref: 'User',
 		},
 		chat: {
 			type: mongoose.Schema.Types.ObjectId,
-			ref: 'ChatModel',
+			ref: 'Chat',
 		},
 	},
 	{
@@ -17,6 +17,6 @@ const messageSchema = mongoose.Schema(
 	}
 );
 
-const MessageModel = mongoose.model('Message', messageSchema);
+const Message = mongoose.model('Message', messageSchema);
 
-export default MessageModel;
+export default Message;
