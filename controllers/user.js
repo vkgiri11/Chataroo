@@ -81,3 +81,23 @@ export const loginUser = async (req, res) => {
 		console.log(error);
 	}
 };
+
+export const getUsersBySearch = async (req, res) => {
+	try {
+		const keyword = req.query.search
+			? {
+					$or: [
+						{ name: { $regex: req.query.search, $options: 'i' } },
+						{ email: { $regex: req.query.search, $options: 'i' } },
+					],
+			  }
+			: {};
+
+		const users = await UserModal.find(keyword).find({ _id: { $ne: req.user._id } });
+
+		res.json({ data: users });
+	} catch (error) {
+		res.status(500).json({ message: 'Something went wrong' });
+		console.log(error);
+	}
+};

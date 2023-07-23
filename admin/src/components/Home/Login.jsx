@@ -68,7 +68,7 @@ const Login = () => {
 
 		localStorage.setItem('loggedUserInfo', JSON.stringify(res.data));
 		setLoading(false);
-		navigateTo('chats');
+		navigateTo('/chats');
 	};
 
 	return (
