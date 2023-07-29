@@ -29,7 +29,7 @@ const GroupChatModal = ({ children }) => {
 	const [searchResult, setSearchResult] = useState([]);
 	const [loading, setLoading] = useState(false);
 
-	const { user, chats, setChats } = ChatState();
+	const { setChats } = ChatState();
 
 	const toast = useToast();
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -138,7 +138,7 @@ const GroupChatModal = ({ children }) => {
 			<Modal onClose={onClose} isOpen={isOpen} isCentered>
 				<ModalOverlay />
 				<ModalContent>
-					<ModalHeader fontSize="35px" fontFamily="Notosans" display="flex" justifyContent="center">
+					<ModalHeader fontSize="35px" fontFamily="Noto sans" display="flex" justifyContent="center">
 						Create Group Chat
 					</ModalHeader>
 					<ModalCloseButton />

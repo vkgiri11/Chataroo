@@ -26,7 +26,7 @@ const index = () => {
 					w="100%"
 					m="40px 0 15px"
 					borderRadius="lg">
-					<Text fontSize="4xl" fontWeight="500" fontFamily="NotoSans" color="#28282B">
+					<Text fontSize="4xl" fontWeight="500" fontFamily="Noto sans" color="#28282B">
 						CHATAROO
 					</Text>
 				</Box>

@@ -115,7 +115,7 @@ const SideDrawer = () => {
 						</Text>
 					</Button>
 				</Tooltip>
-				<Text fontSize="2xl" fontFamily="NotoSans">
+				<Text fontSize="2xl" fontFamily="Noto sans">
 					Chataroo
 				</Text>
 				<div>
