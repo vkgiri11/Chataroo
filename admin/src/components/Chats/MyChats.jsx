@@ -6,6 +6,7 @@ import { AddIcon } from '@chakra-ui/icons';
 import { ChatState } from '../../context/chatProvider';
 import { asyncWrap, getSender } from '../../utils';
 import ChatLoading from './ChatLoading';
+import GroupChatModal from './GroupChatModal';
 
 const MyChats = () => {
 	const [loggedUser, setLoggedUser] = useState();
@@ -64,12 +65,14 @@ const MyChats = () => {
 					justifyContent="space-between"
 					alignItems="center">
 					My Chats
-					<Button
-						display="flex"
-						fontSize={{ base: '17px', md: '10px', lg: '17px' }}
-						rightIcon={<AddIcon />}>
-						New Group Chat
-					</Button>
+					<GroupChatModal>
+						<Button
+							display="flex"
+							fontSize={{ base: '17px', md: '10px', lg: '17px' }}
+							rightIcon={<AddIcon />}>
+							New Group Chat
+						</Button>
+					</GroupChatModal>
 				</Box>
 				<Box
 					display="flex"
@@ -83,6 +86,10 @@ const MyChats = () => {
 					<Stack overflowY="auto">
 						{loading ? (
 							<ChatLoading />
+						) : !chats.length ? (
+							<Text display="flex" justifyContent="center" py={5}>
+								No Chats Found
+							</Text>
 						) : (
 							chats.map((item) => (
 								<Box
