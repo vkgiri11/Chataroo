@@ -24,9 +24,8 @@ import { asyncWrap } from '../../utils';
 import UserBadgeItem from './UserBadgeItem';
 import UserListItem from './UserListItem';
 
-const UpdateGroupChat = ({ refreshList, setRefreshList }) => {
+const UpdateGroupChat = ({ setRefreshList }) => {
 	const [groupChatName, setGroupChatName] = useState('');
-	const [search, setSearch] = useState('');
 	const [searchResult, setSearchResult] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [renameloading, setRenameLoading] = useState(false);
@@ -156,14 +155,12 @@ const UpdateGroupChat = ({ refreshList, setRefreshList }) => {
 
 	// :TODO - Add debounce
 	const handleSearch = async (query) => {
-		setSearch(query);
-
 		if (!query) return;
 
 		try {
 			setLoading(true);
 
-			const [res, err] = await asyncWrap(axios.get(`user?search=${search}`));
+			const [res, err] = await asyncWrap(axios.get(`user?search=${query}`));
 
 			setSearchResult(res.data.data);
 		} catch (error) {

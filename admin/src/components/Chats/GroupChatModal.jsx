@@ -25,7 +25,6 @@ import UserBadgeItem from './UserBadgeItem';
 const GroupChatModal = ({ children }) => {
 	const [groupChatName, setGroupChatName] = useState('');
 	const [selectedUsers, setSelectedUsers] = useState([]);
-	const [search, setSearch] = useState('');
 	const [searchResult, setSearchResult] = useState([]);
 	const [loading, setLoading] = useState(false);
 
@@ -33,6 +32,11 @@ const GroupChatModal = ({ children }) => {
 
 	const toast = useToast();
 	const { isOpen, onOpen, onClose } = useDisclosure();
+
+	const handleModalClose = () => {
+		setSearchResult([]);
+		onClose();
+	};
 
 	const handleGroup = (userToAdd) => {
 		if (selectedUsers.includes(userToAdd)) {
@@ -55,14 +59,12 @@ const GroupChatModal = ({ children }) => {
 
 	// :TODO - Add debounce
 	const handleSearch = async (query) => {
-		setSearch(query);
-
 		if (!query) return;
 
 		try {
 			setLoading(true);
 
-			const [res, err] = await asyncWrap(axios.get(`user?search=${search}`));
+			const [res, err] = await asyncWrap(axios.get(`user?search=${query}`));
 
 			setSearchResult(res.data.data);
 		} catch (error) {
@@ -111,7 +113,7 @@ const GroupChatModal = ({ children }) => {
 		const [res, err] = await asyncWrap(axios.post('chat/create_group', payload));
 
 		setChats((p) => [res.data.data, ...p]);
-		onClose();
+		handleModalClose();
 		toast({
 			title: 'New Group Chat Created!',
 			status: 'success',
@@ -136,7 +138,7 @@ const GroupChatModal = ({ children }) => {
 	return (
 		<>
 			<span onClick={onOpen}>{children}</span>
-			<Modal onClose={onClose} isOpen={isOpen} isCentered>
+			<Modal onClose={handleModalClose} isOpen={isOpen} isCentered>
 				<ModalOverlay />
 				<ModalContent>
 					<ModalHeader
