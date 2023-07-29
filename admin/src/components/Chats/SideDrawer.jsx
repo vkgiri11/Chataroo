@@ -44,8 +44,14 @@ const SideDrawer = () => {
 
 	const logoutHandler = () => {
 		localStorage.removeItem('loggedUserInfo');
-    window.location.reload();
+		window.location.reload();
 		navigateTo('/home');
+	};
+
+	const handleDrawerClose = () => {
+		setSearch('');
+		setSearchResult([]);
+		onClose();
 	};
 
 	const handleSearch = async () => {
@@ -67,7 +73,7 @@ const SideDrawer = () => {
 			});
 		}
 
-    setLoading(false);
+		setLoading(false);
 	};
 
 	const accessChat = async (showUserId) => {
@@ -76,13 +82,15 @@ const SideDrawer = () => {
 
 			const [res, err] = await asyncWrap(axios.post('chat', { userId: showUserId }));
 
-			// if a new chat is created append it to the existing list of chats current user already has
-			if (!chats?.find((item) => item._id === res.data.data._id))
-				setChats((p) => [...p, res.data.data]);
+			if (res) {
+				// if a new chat is created append it to the existing list of chats current user already has
+				if (!chats.find((item) => item._id === res.data.data._id))
+					setChats((p) => [...p, res.data.data]);
 
-			setSelectedChat(res.data.data);
-			setLoadingChat(false);
-			onClose();
+				setSelectedChat(res.data.data);
+				setLoadingChat(false);
+				handleDrawerClose();
+			}
 		} catch (error) {
 			console.log(error);
 			toast({
@@ -140,7 +148,7 @@ const SideDrawer = () => {
 				</div>
 			</Box>
 
-			<Drawer placement="left" onClose={onClose} isOpen={isOpen}>
+			<Drawer placement="left" onClose={handleDrawerClose} isOpen={isOpen}>
 				<DrawerOverlay />
 				<DrawerContent>
 					<DrawerHeader borderBottomWidth="1px">Search Users</DrawerHeader>
@@ -163,7 +171,9 @@ const SideDrawer = () => {
 								<UserListItem
 									key={item._id}
 									user={item}
-									handleFunction={() => accessChat(item._id)}
+									handleFunction={() => {
+										if (!loadingChat) accessChat(item._id);
+									}}
 								/>
 							))
 						)}
