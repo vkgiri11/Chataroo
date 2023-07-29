@@ -12,6 +12,7 @@ import {
 	VStack,
 } from '@chakra-ui/react';
 
+import { setToken } from '../../axiosDefaults';
 import { asyncWrap, emptyCheck } from '../../utils';
 
 const Register = () => {
