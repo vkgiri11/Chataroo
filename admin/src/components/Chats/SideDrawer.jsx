@@ -65,6 +65,7 @@ const SideDrawer = () => {
 				isClosable: true,
 				position: 'bottom-left',
 			});
+			setLoading(false);
 		}
 	};
 
@@ -91,6 +92,7 @@ const SideDrawer = () => {
 				isClosable: true,
 				position: 'bottom-left',
 			});
+			setLoadingChat(false);
 		}
 	};
 
