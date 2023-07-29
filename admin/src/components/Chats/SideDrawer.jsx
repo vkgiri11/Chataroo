@@ -44,6 +44,7 @@ const SideDrawer = () => {
 
 	const logoutHandler = () => {
 		localStorage.removeItem('loggedUserInfo');
+    window.location.reload();
 		navigateTo('/home');
 	};
 

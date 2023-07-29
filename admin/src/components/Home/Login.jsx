@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/react';
 
 import { asyncWrap, emptyCheck } from '../../utils';
+import { setToken } from '../../axiosDefaults';
 
 const Login = () => {
 	const [formData, setFormData] = useState({
@@ -58,6 +59,12 @@ const Login = () => {
 			return;
 		}
 
+		localStorage.setItem('loggedUserInfo', JSON.stringify(res.data));
+		setToken(res.data.token);
+		setLoading(false);
+		navigateTo('/chats');
+		window.location.reload();
+
 		toast({
 			title: 'Login Successfull.',
 			status: 'success',
@@ -65,10 +72,6 @@ const Login = () => {
 			position: 'bottom',
 			isClosable: true,
 		});
-
-		localStorage.setItem('loggedUserInfo', JSON.stringify(res.data));
-		setLoading(false);
-		navigateTo('/chats');
 	};
 
 	return (

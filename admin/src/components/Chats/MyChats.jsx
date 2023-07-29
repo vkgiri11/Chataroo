@@ -9,16 +9,21 @@ import ChatLoading from './ChatLoading';
 
 const MyChats = () => {
 	const [loggedUser, setLoggedUser] = useState();
-  
+	const [loading, setLoading] = useState(false);
+
 	const { user, chats, selectedChat, setSelectedChat, setChats } = ChatState();
 
 	const toast = useToast();
 
 	const fetchChats = async () => {
 		try {
+			setLoading(true);
 			const [res, err] = await asyncWrap(axios.get('chat'));
 
+			if (err) return;
+
 			setChats(res.data.data);
+			setLoading(false);
 		} catch (error) {
 			console.log(error);
 			toast({
@@ -29,6 +34,7 @@ const MyChats = () => {
 				isClosable: true,
 				position: 'bottom-left',
 			});
+			setLoading(false);
 		}
 	};
 
@@ -74,9 +80,11 @@ const MyChats = () => {
 					h="100%"
 					borderRadius="lg"
 					overflowY="hidden">
-					{chats ? (
-						<Stack overflowY="auto">
-							{chats.map((item) => (
+					<Stack overflowY="auto">
+						{loading ? (
+							<ChatLoading />
+						) : (
+							chats.map((item) => (
 								<Box
 									key={item._id}
 									onClick={() => setSelectedChat(item)}
@@ -98,11 +106,9 @@ const MyChats = () => {
 										</Text>
 									)}
 								</Box>
-							))}
-						</Stack>
-					) : (
-						<ChatLoading />
-					)}
+							))
+						)}
+					</Stack>
 				</Box>
 			</Box>
 		</>
