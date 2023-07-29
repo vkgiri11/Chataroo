@@ -62,8 +62,8 @@ const Login = () => {
 		localStorage.setItem('loggedUserInfo', JSON.stringify(res.data));
 		setToken(res.data.token);
 		setLoading(false);
-		navigateTo('/chats');
 		window.location.reload();
+		navigateTo('/chats');
 
 		toast({
 			title: 'Login Successfull.',
