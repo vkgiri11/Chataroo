@@ -8,7 +8,7 @@ import { asyncWrap, getSender } from '../../utils';
 import ChatLoading from './ChatLoading';
 import GroupChatModal from './GroupChatModal';
 
-const MyChats = () => {
+const MyChats = ({ refreshList }) => {
 	const [loggedUser, setLoggedUser] = useState();
 	const [loading, setLoading] = useState(false);
 
@@ -24,7 +24,6 @@ const MyChats = () => {
 			if (err) return;
 
 			setChats(res.data.data);
-			setLoading(false);
 		} catch (error) {
 			console.log(error);
 			toast({
@@ -35,14 +34,15 @@ const MyChats = () => {
 				isClosable: true,
 				position: 'bottom-left',
 			});
-			setLoading(false);
 		}
+
+    setLoading(false);
 	};
 
 	useEffect(() => {
 		setLoggedUser(JSON.parse(localStorage.getItem('loggedUserInfo')));
 		fetchChats();
-	}, []);
+	}, [refreshList]);
 
 	return (
 		<>
@@ -59,7 +59,7 @@ const MyChats = () => {
 					pb={3}
 					px={3}
 					fontSize={{ base: '28px', md: '30px' }}
-					fontFamily="Notosans"
+					fontFamily="Noto sans"
 					display="flex"
 					w="100%"
 					justifyContent="space-between"

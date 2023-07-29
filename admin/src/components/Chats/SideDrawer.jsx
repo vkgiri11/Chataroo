@@ -55,7 +55,6 @@ const SideDrawer = () => {
 			const [res, err] = await asyncWrap(axios.get(`user?search=${search}`));
 
 			setSearchResult(res.data.data);
-			setLoading(false);
 		} catch (error) {
 			console.log(error);
 			toast({
@@ -66,8 +65,9 @@ const SideDrawer = () => {
 				isClosable: true,
 				position: 'bottom-left',
 			});
-			setLoading(false);
 		}
+
+    setLoading(false);
 	};
 
 	const accessChat = async (showUserId) => {

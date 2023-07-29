@@ -53,6 +53,7 @@ const GroupChatModal = ({ children }) => {
 		setSelectedUsers((p) => p.filter((item) => item._id !== delUser._id));
 	};
 
+	// :TODO - Add debounce
 	const handleSearch = async (query) => {
 		setSearch(query);
 
@@ -64,7 +65,6 @@ const GroupChatModal = ({ children }) => {
 			const [res, err] = await asyncWrap(axios.get(`user?search=${search}`));
 
 			setSearchResult(res.data.data);
-			setLoading(false);
 		} catch (error) {
 			console.log(error);
 			toast({
@@ -75,8 +75,9 @@ const GroupChatModal = ({ children }) => {
 				isClosable: true,
 				position: 'bottom-left',
 			});
-			setLoading(false);
 		}
+
+		setLoading(false);
 	};
 
 	const handleSubmit = async () => {
@@ -109,7 +110,7 @@ const GroupChatModal = ({ children }) => {
 
 		const [res, err] = await asyncWrap(axios.post('chat/create_group', payload));
 
-		setChats(p => [res.data.data, ...p])
+		setChats((p) => [res.data.data, ...p]);
 		onClose();
 		toast({
 			title: 'New Group Chat Created!',
@@ -138,7 +139,11 @@ const GroupChatModal = ({ children }) => {
 			<Modal onClose={onClose} isOpen={isOpen} isCentered>
 				<ModalOverlay />
 				<ModalContent>
-					<ModalHeader fontSize="35px" fontFamily="Noto sans" display="flex" justifyContent="center">
+					<ModalHeader
+						fontSize="35px"
+						fontFamily="Noto sans"
+						display="flex"
+						justifyContent="center">
 						Create Group Chat
 					</ModalHeader>
 					<ModalCloseButton />
