@@ -8,7 +8,7 @@ export const accessChat = async (req, res) => {
 
 	try {
 		// if chat exists with this user
-		let existingChat = await ChatModel.findOne({
+		let existingChat = await ChatModel.find({
 			isGroupChat: false,
 			$and: [
 				{ users: { $elemMatch: { $eq: req.user._id } } },

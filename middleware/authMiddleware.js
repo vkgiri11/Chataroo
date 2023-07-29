@@ -8,19 +8,18 @@ dotenv.config();
 const secret = process.env.JWT_SECRET;
 
 const authMiddleware = async (req, res, next) => {
-	if (req.headers.authorization && req.headers.authorization.startsWith('Bearer'))
-		try {
-			const token = req.headers.authorization.split(' ')[1];
+	try {
+		const token = req.headers.authorization.split(' ')[1];
 
-			const decodedData = jwt.verify(token, secret);
+		const decodedData = jwt.decode(token, secret);
 
-			req.user = await UserModal.findById(decodedData.id).select('-password');
+		req.user = await UserModal.findById(decodedData.id).select('-password');
 
-			next();
-		} catch (error) {
-			res.status(401);
-			console.log(`Not authorized =====>> ${error}`);
-		}
+		next();
+	} catch (error) {
+		res.status(401);
+		console.log(`Not authorized =====>> ${error}`);
+	}
 };
 
 export default authMiddleware;

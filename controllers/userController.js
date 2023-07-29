@@ -24,7 +24,7 @@ export const registerUser = async (req, res) => {
 		if (existingUser) return res.status(400).json({ message: 'User already exists' });
 
 		let photoUrl;
-    if(pic) photoUrl = await cloudinary.uploader.upload(pic);
+		if (pic) photoUrl = await cloudinary.uploader.upload(pic);
 
 		const result = await UserModel.create({
 			email,
@@ -43,6 +43,7 @@ export const registerUser = async (req, res) => {
 			email: result.email,
 			createdAt: result.createdAt,
 			token,
+			pic: result.pic,
 		});
 	} catch (error) {
 		res.status(500).json({ message: 'Something went wrong' });
@@ -94,7 +95,9 @@ export const getUsersBySearch = async (req, res) => {
 			  }
 			: {};
 
-		const users = await UserModel.find(keyword).find({ _id: { $ne: req.user._id } });
+		const users = await UserModel.find(keyword)
+			.find({ _id: { $ne: req.user._id } })
+			.select('-password');
 
 		res.json({ data: users });
 	} catch (error) {

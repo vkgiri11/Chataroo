@@ -8,3 +8,7 @@ export function setAxiosDefault() {
 	axios.defaults.headers.common['Content-Type'] = 'application/json';
 	axios.defaults.headers.common['Accept'] = 'application/json';
 }
+
+export function setToken(token) {
+	axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+}

@@ -1,12 +1,16 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
 
-import { setAxiosDefault } from './axiosDefaults';
+import { setAxiosDefault, setToken } from './axiosDefaults';
 import ChatsPage from './components/Chats';
 import HomePage from './components/Home';
 
 function App() {
+	const user = JSON.parse(localStorage.getItem('loggedUserInfo'));
+
 	setAxiosDefault();
+
+	if (user?.token) setToken(user.token);
 
 	return (
 		<>
