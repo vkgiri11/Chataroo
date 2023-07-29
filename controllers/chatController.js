@@ -124,7 +124,7 @@ export const addToGroup = async (req, res) => {
 	try {
 		const addUser = await ChatModel.findByIdAndUpdate(
 			chatId,
-			{ $push: { user: userId } },
+			{ $push: { users: userId } },
 			{ new: true }
 		)
 			.populate('users', '-password')
@@ -147,7 +147,7 @@ export const removeFromGroup = async (req, res) => {
 	try {
 		const removeUser = await ChatModel.findByIdAndUpdate(
 			chatId,
-			{ $pull: { user: userId } },
+			{ $pull: { users: userId } },
 			{ new: true }
 		)
 			.populate('users', '-password')

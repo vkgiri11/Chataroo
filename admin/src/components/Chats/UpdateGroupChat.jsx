@@ -131,7 +131,7 @@ const UpdateGroupChat = ({ refreshList, setRefreshList }) => {
 			setLoading(true);
 
 			const [res, err] = await asyncWrap(
-				axios.put('chat/add_to_group', {
+				axios.put('chat/remove_from_group', {
 					chatId: selectedChat._id,
 					userId: delUser._id,
 				})
