@@ -5,14 +5,14 @@ import './index.css';
 
 import { ChakraProvider } from '@chakra-ui/react';
 import { BrowserRouter } from 'react-router-dom';
-import { ChatProvider } from './context/chatProvider.js';
+import { ChatProvider } from './context/chatProvider.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-	<ChatProvider>
-		<BrowserRouter>
+	<BrowserRouter>
+		<ChatProvider>
 			<ChakraProvider>
 				<App />
 			</ChakraProvider>
-		</BrowserRouter>
-	</ChatProvider>
+		</ChatProvider>
+	</BrowserRouter>
 );
