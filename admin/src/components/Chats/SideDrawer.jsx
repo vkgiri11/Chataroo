@@ -60,7 +60,7 @@ const SideDrawer = () => {
 
 			const [res, err] = await asyncWrap(axios.get(`user?search=${search}`));
 
-			setSearchResult(res.data.data);
+			if (res) setSearchResult(res.data.data);
 		} catch (error) {
 			console.log(error);
 			toast({
@@ -177,7 +177,11 @@ const SideDrawer = () => {
 								/>
 							))
 						)}
-						{loadingChat && <Spinner ml="auto" d="flex" />}
+						{loadingChat && (
+							<Box display="flex" justifyContent="center" mt={2}>
+								<Spinner />
+							</Box>
+						)}
 					</DrawerBody>
 				</DrawerContent>
 			</Drawer>
