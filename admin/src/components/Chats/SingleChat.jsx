@@ -6,7 +6,7 @@ import { getSender, getSenderDetails } from '../../utils';
 import ProfileModal from '../Misc/ProfileModal';
 import UpdateGroupChat from './UpdateGroupChat';
 
-const SingleChat = ({ refreshList, setRefreshList }) => {
+const SingleChat = ({ setRefreshList }) => {
 	const { user, selectedChat, setSelectedChat } = ChatState();
 
 	return (
@@ -30,7 +30,7 @@ const SingleChat = ({ refreshList, setRefreshList }) => {
 						{selectedChat.isGroupChat ? (
 							<>
 								{selectedChat.chatName.toUpperCase()}
-								<UpdateGroupChat refreshList={refreshList} setRefreshList={setRefreshList} />
+								<UpdateGroupChat setRefreshList={setRefreshList} />
 							</>
 						) : (
 							<>

@@ -3,7 +3,7 @@ import { Box } from '@chakra-ui/react';
 import { ChatState } from '../../context/chatProvider';
 import SingleChat from './SingleChat';
 
-const ChatBox = ({ refreshList, setRefreshList }) => {
+const ChatBox = ({ setRefreshList }) => {
 	const { selectedChat } = ChatState();
 
 	return (
@@ -17,7 +17,7 @@ const ChatBox = ({ refreshList, setRefreshList }) => {
 				w={{ base: '100%', md: '68%' }}
 				borderRadius="lg"
 				borderWidth="1px">
-				<SingleChat refreshList={refreshList} setRefreshList={setRefreshList} />
+				<SingleChat setRefreshList={setRefreshList} />
 			</Box>
 		</>
 	);

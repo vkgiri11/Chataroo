@@ -19,7 +19,7 @@ const index = () => {
 						<SideDrawer />
 						<Box display="flex" justifyContent="space-between" w="100%" h="91.5vh" p="10px">
 							<MyChats refreshList={refreshList} />
-							<ChatBox refreshList={refreshList} setRefreshList={setRefreshList} />
+							<ChatBox setRefreshList={setRefreshList} />
 						</Box>
 					</>
 				)}
