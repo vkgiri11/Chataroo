@@ -24,7 +24,7 @@ import UserBadgeItem from '../Misc/UserBadgeItem';
 import UserListItem from '../Misc/UserListItem';
 import ChatLoading from '../Misc/ChatLoading';
 
-const UpdateGroupChat = ({ setRefreshList }) => {
+const UpdateGroupChat = ({ setRefreshList, fetchMessages }) => {
 	const [groupChatName, setGroupChatName] = useState('');
 	const [searchResult, setSearchResult] = useState([]);
 	const [loading, setLoading] = useState(false);
@@ -132,8 +132,6 @@ const UpdateGroupChat = ({ setRefreshList }) => {
 		}
 
 		try {
-			setLoading(true);
-
 			const [res, err] = await asyncWrap(
 				axios.put('chat/remove_from_group', {
 					chatId: selectedChat._id,
@@ -143,6 +141,7 @@ const UpdateGroupChat = ({ setRefreshList }) => {
 
 			delUser._id === user._id ? setSelectedChat() : setSelectedChat(res.data.data);
 			setRefreshList((p) => !p);
+			fetchMessages();
 		} catch (error) {
 			console.log(error);
 			toast({
@@ -154,8 +153,6 @@ const UpdateGroupChat = ({ setRefreshList }) => {
 				position: 'bottom',
 			});
 		}
-
-		setLoading(false);
 	};
 
 	// :TODO - Add debounce

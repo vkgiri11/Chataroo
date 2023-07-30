@@ -1,5 +1,6 @@
 import MessageModel from '../models/messageModel.js';
 import UserModel from '../models/userModel.js';
+import ChatModel from '../models/chatModel.js';
 
 export const sendMessage = async (req, res) => {
 	const { content, to_chatId } = req.body;
@@ -23,7 +24,7 @@ export const sendMessage = async (req, res) => {
 			select: 'name pic email',
 		});
 
-		await Chat.findByIdAndUpdate(to_chatId, { latestMessage: message });
+		await ChatModel.findByIdAndUpdate(to_chatId, { latestMessage: message });
 
 		return res.status(200).json({ data: message });
 	} catch (error) {
