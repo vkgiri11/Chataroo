@@ -35,6 +35,11 @@ const UpdateGroupChat = ({ setRefreshList }) => {
 	const toast = useToast();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
+	const handleModalClose = () => {
+		setSearchResult([]);
+		onClose();
+	};
+
 	const handleRename = async () => {
 		try {
 			setRenameLoading(true);
@@ -76,7 +81,7 @@ const UpdateGroupChat = ({ setRefreshList }) => {
 			return;
 		}
 
-		if (selectedChat.groupAdmin._id !== addUser._id) {
+		if (selectedChat.groupAdmin._id !== user._id) {
 			toast({
 				title: 'Only admins can add someone!',
 				status: 'error',
@@ -98,7 +103,7 @@ const UpdateGroupChat = ({ setRefreshList }) => {
 			);
 
 			setSelectedChat(res.data.data);
-			setFetchAgain((p) => !p);
+			setRefreshList((p) => !p);
 		} catch (error) {
 			console.log(error);
 			toast({
@@ -115,7 +120,7 @@ const UpdateGroupChat = ({ setRefreshList }) => {
 	};
 
 	const handleRemove = async (delUser) => {
-		if (selectedChat.groupAdmin._id !== user._id && delUser._id !== user._id) {
+		if (selectedChat.groupAdmin._id !== user._id) {
 			toast({
 				title: 'Only admins can remove someone!',
 				status: 'error',
@@ -181,7 +186,7 @@ const UpdateGroupChat = ({ setRefreshList }) => {
 	return (
 		<>
 			<IconButton display={{ base: 'flex' }} icon={<ViewIcon />} onClick={onOpen} />
-			<Modal onClose={onClose} isOpen={isOpen} isCentered>
+			<Modal onClose={handleModalClose} isOpen={isOpen} isCentered>
 				<ModalOverlay />
 				<ModalContent>
 					<ModalHeader
@@ -196,7 +201,12 @@ const UpdateGroupChat = ({ setRefreshList }) => {
 					<ModalBody display="flex" flexDir="column" alignItems="center">
 						<Box w="100%" display="flex" flexWrap="wrap" pb={3}>
 							{selectedChat.users.map((u) => (
-								<UserBadgeItem key={u._id} user={u} handleFunction={() => handleRemove(u)} />
+								<UserBadgeItem
+									key={u._id}
+									user={u}
+									admin={selectedChat.groupAdmin._id}
+									handleFunction={() => handleRemove(u)}
+								/>
 							))}
 						</Box>
 						<FormControl display="flex">
