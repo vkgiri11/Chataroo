@@ -13,6 +13,8 @@ import {
 	ModalFooter,
 	ModalHeader,
 	ModalOverlay,
+	Spinner,
+	Text,
 	useDisclosure,
 	useToast,
 } from '@chakra-ui/react';
@@ -29,6 +31,7 @@ const UpdateGroupChat = ({ setRefreshList, fetchMessages }) => {
 	const [searchResult, setSearchResult] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [renameloading, setRenameLoading] = useState(false);
+	const [removeUserloading, setRemoveUserLoading] = useState(false);
 
 	const { user, selectedChat, setSelectedChat } = ChatState();
 
@@ -132,6 +135,8 @@ const UpdateGroupChat = ({ setRefreshList, fetchMessages }) => {
 		}
 
 		try {
+			setRemoveUserLoading(true);
+
 			const [res, err] = await asyncWrap(
 				axios.put('chat/remove_from_group', {
 					chatId: selectedChat._id,
@@ -153,18 +158,23 @@ const UpdateGroupChat = ({ setRefreshList, fetchMessages }) => {
 				position: 'bottom',
 			});
 		}
+
+		setRemoveUserLoading(false);
 	};
 
 	// :TODO - Add debounce
 	const handleSearch = async (query) => {
-		if (!query) return;
+		if (!query) {
+			setSearchResult([]);
+			return;
+		}
 
 		try {
 			setLoading(true);
 
 			const [res, err] = await asyncWrap(axios.get(`user?search=${query}`));
 
-			setSearchResult(res.data.data);
+			if (res) setSearchResult(res.data.data);
 		} catch (error) {
 			console.log(error);
 			toast({
@@ -193,59 +203,68 @@ const UpdateGroupChat = ({ setRefreshList, fetchMessages }) => {
 						justifyContent="center">
 						{selectedChat.chatName}
 					</ModalHeader>
-
 					<ModalCloseButton />
 					<ModalBody display="flex" flexDir="column" alignItems="center">
-						<Box w="100%" display="flex" flexWrap="wrap" pb={3}>
-							{selectedChat.users.map((u) => (
-								<UserBadgeItem
-									key={u._id}
-									user={u}
-									admin={selectedChat.groupAdmin._id}
-									handleFunction={() => handleRemove(u)}
-								/>
-							))}
-						</Box>
-						<FormControl display="flex">
-							<Input
-								placeholder="Chat Name"
-								mb={3}
-								value={groupChatName}
-								onChange={(e) => setGroupChatName(e.target.value)}
-							/>
-							<Button
-								variant="solid"
-								colorScheme="teal"
-								ml={1}
-								isDisabled={!groupChatName}
-								isLoading={renameloading}
-								onClick={handleRename}>
-								Update
-							</Button>
-						</FormControl>
-						<FormControl>
-							<Input
-								placeholder="Add User to group"
-								mb={3}
-								onChange={(e) => handleSearch(e.target.value)}
-							/>
-						</FormControl>
-
-						<Box display="flex" flexDir="column" w="100%" h="100%">
-							{loading ? (
-								<ChatLoading number={4} />
-							) : (
-								searchResult
-									.slice(0, 4)
-									?.map((item) => (
-										<UserListItem
-											key={item._id}
-											user={item}
-											handleFunction={() => handleAddUser(item)}
+						{removeUserloading ? (
+							<Box w="100%" display="flex" justifyContent="center" flexWrap="wrap" pb={3}>
+								<Spinner />
+								<Text pl={3} fontSize="15px">
+									Removing User From Group
+								</Text>
+							</Box>
+						) : (
+							<>
+								<Box w="100%" display="flex" flexWrap="wrap" pb={3}>
+									{selectedChat.users.map((u) => (
+										<UserBadgeItem
+											key={u._id}
+											user={u}
+											admin={selectedChat.groupAdmin._id}
+											handleFunction={() => handleRemove(u)}
 										/>
-									))
-							)}
-						</Box>
+									))}
+								</Box>
+								<FormControl display="flex">
+									<Input
+										placeholder="Chat Name"
+										mb={3}
+										value={groupChatName}
+										onChange={(e) => setGroupChatName(e.target.value)}
+									/>
+									<Button
+										variant="solid"
+										colorScheme="teal"
+										ml={1}
+										isDisabled={!groupChatName}
+										isLoading={renameloading}
+										onClick={handleRename}>
+										Update
+									</Button>
+								</FormControl>
+								<FormControl>
+									<Input
+										placeholder="Add User to group"
+										mb={3}
+										onChange={(e) => handleSearch(e.target.value)}
+									/>
+								</FormControl>
+								<Box display="flex" flexDir="column" w="100%" h="100%">
+									{loading ? (
+										<ChatLoading number={4} />
+									) : (
+										searchResult
+											.slice(0, 4)
+											?.map((item) => (
+												<UserListItem
+													key={item._id}
+													user={item}
+													handleFunction={() => handleAddUser(item)}
+												/>
+											))
+									)}
+								</Box>
+							</>
+						)}
 					</ModalBody>
 					<ModalFooter>
 						<Button onClick={() => handleRemove(user)} colorScheme="red">
