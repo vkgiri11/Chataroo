@@ -6,7 +6,8 @@
   background-image: url('./assets/chat_bg.png');
   background-size: cover;
   background-position: center;
-  color: #28282B
+  color: #28282B;
+  font-family: "Noto sans";
 }
 
 ::-webkit-scrollbar {
