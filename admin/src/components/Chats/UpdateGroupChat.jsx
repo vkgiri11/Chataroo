@@ -13,7 +13,6 @@ import {
 	ModalFooter,
 	ModalHeader,
 	ModalOverlay,
-	Spinner,
 	useDisclosure,
 	useToast,
 } from '@chakra-ui/react';
@@ -23,6 +22,7 @@ import { ChatState } from '../../context/chatProvider';
 import { asyncWrap } from '../../utils';
 import UserBadgeItem from './UserBadgeItem';
 import UserListItem from './UserListItem';
+import ChatLoading from './ChatLoading';
 
 const UpdateGroupChat = ({ setRefreshList }) => {
 	const [groupChatName, setGroupChatName] = useState('');
@@ -234,17 +234,21 @@ const UpdateGroupChat = ({ setRefreshList }) => {
 							/>
 						</FormControl>
 
-						{loading ? (
-							<Spinner size="lg" />
-						) : (
-							searchResult?.map((item) => (
-								<UserListItem
-									key={item._id}
-									user={item}
-									handleFunction={() => handleAddUser(item)}
-								/>
-							))
-						)}
+						<Box display="flex" flexDir="column" w="100%" h="100%">
+							{loading ? (
+								<ChatLoading number={4} />
+							) : (
+								searchResult
+									.slice(0, 4)
+									?.map((item) => (
+										<UserListItem
+											key={item._id}
+											user={item}
+											handleFunction={() => handleAddUser(item)}
+										/>
+									))
+							)}
+						</Box>
 					</ModalBody>
 					<ModalFooter>
 						<Button onClick={() => handleRemove(user)} colorScheme="red">

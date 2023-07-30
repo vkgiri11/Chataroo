@@ -12,7 +12,6 @@ import {
 	ModalFooter,
 	ModalHeader,
 	ModalOverlay,
-	Text,
 	useDisclosure,
 	useToast,
 } from '@chakra-ui/react';
@@ -21,6 +20,7 @@ import { ChatState } from '../../context/chatProvider';
 import { asyncWrap } from '../../utils';
 import UserListItem from './UserListItem';
 import UserBadgeItem from './UserBadgeItem';
+import ChatLoading from './ChatLoading';
 
 const GroupChatModal = ({ children }) => {
 	const [groupChatName, setGroupChatName] = useState('');
@@ -180,19 +180,21 @@ const GroupChatModal = ({ children }) => {
 							))}
 						</Box>
 
-						{loading ? (
-							<Text py={3}>Loading...</Text>
-						) : (
-							searchResult
-								.slice(0, 4)
-								.map((item) => (
-									<UserListItem
-										key={item._id}
-										user={item}
-										handleFunction={() => handleGroup(item)}
-									/>
-								))
-						)}
+						<Box display="flex" flexDir="column" w="100%" h="100%">
+							{loading ? (
+								<ChatLoading number={4} />
+							) : (
+								searchResult
+									.slice(0, 4)
+									.map((item) => (
+										<UserListItem
+											key={item._id}
+											user={item}
+											handleFunction={() => handleGroup(item)}
+										/>
+									))
+							)}
+						</Box>
 					</ModalBody>
 					<ModalFooter>
 						<Button onClick={handleSubmit} isDisabled={submitLoading} colorScheme="blue">
