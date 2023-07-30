@@ -120,7 +120,7 @@ const UpdateGroupChat = ({ setRefreshList }) => {
 	};
 
 	const handleRemove = async (delUser) => {
-		if (selectedChat.groupAdmin._id !== user._id) {
+		if (selectedChat.groupAdmin._id !== user._id && user._id !== delUser._id) {
 			toast({
 				title: 'Only admins can remove someone!',
 				status: 'error',

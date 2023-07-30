@@ -27,6 +27,7 @@ const GroupChatModal = ({ children }) => {
 	const [selectedUsers, setSelectedUsers] = useState([]);
 	const [searchResult, setSearchResult] = useState([]);
 	const [loading, setLoading] = useState(false);
+	const [submitLoading, setSubmitLoading] = useState(false);
 
 	const { setChats } = ChatState();
 
@@ -83,6 +84,8 @@ const GroupChatModal = ({ children }) => {
 	};
 
 	const handleSubmit = async () => {
+		setSubmitLoading(true);
+
 		if (!groupChatName) {
 			toast({
 				title: 'Chat Name is required',
@@ -105,23 +108,23 @@ const GroupChatModal = ({ children }) => {
 			return;
 		}
 
-		const payload = {
-			group_name: groupChatName,
-			users: selectedUsers.map((elem) => elem._id),
-		};
-
-		const [res, err] = await asyncWrap(axios.post('chat/create_group', payload));
-
-		setChats((p) => [res.data.data, ...p]);
-		handleModalClose();
-		toast({
-			title: 'New Group Chat Created!',
-			status: 'success',
-			duration: 5000,
-			isClosable: true,
-			position: 'bottom',
-		});
 		try {
+			const payload = {
+				group_name: groupChatName,
+				users: selectedUsers.map((elem) => elem._id),
+			};
+
+			const [res, err] = await asyncWrap(axios.post('chat/create_group', payload));
+
+			setChats((p) => [res.data.data, ...p]);
+			handleModalClose();
+			toast({
+				title: 'New Group Chat Created!',
+				status: 'success',
+				duration: 5000,
+				isClosable: true,
+				position: 'bottom',
+			});
 		} catch (error) {
 			console.log(error);
 			toast({
@@ -133,6 +136,8 @@ const GroupChatModal = ({ children }) => {
 				position: 'bottom',
 			});
 		}
+
+		setSubmitLoading(false);
 	};
 
 	return (
@@ -190,7 +195,7 @@ const GroupChatModal = ({ children }) => {
 						)}
 					</ModalBody>
 					<ModalFooter>
-						<Button onClick={handleSubmit} colorScheme="blue">
+						<Button onClick={handleSubmit} isDisabled={submitLoading} colorScheme="blue">
 							Create Chat
 						</Button>
 					</ModalFooter>
