@@ -18,9 +18,9 @@ import {
 
 import { ChatState } from '../../context/chatProvider';
 import { asyncWrap } from '../../utils';
-import UserListItem from './UserListItem';
-import UserBadgeItem from './UserBadgeItem';
-import ChatLoading from './ChatLoading';
+import ChatLoading from '../Misc/ChatLoading';
+import UserBadgeItem from '../Misc/UserBadgeItem';
+import UserListItem from '../Misc/UserListItem';
 
 const GroupChatModal = ({ children }) => {
 	const [groupChatName, setGroupChatName] = useState('');

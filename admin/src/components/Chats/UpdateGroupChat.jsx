@@ -20,9 +20,9 @@ import { ViewIcon } from '@chakra-ui/icons';
 
 import { ChatState } from '../../context/chatProvider';
 import { asyncWrap } from '../../utils';
-import UserBadgeItem from './UserBadgeItem';
-import UserListItem from './UserListItem';
-import ChatLoading from './ChatLoading';
+import UserBadgeItem from '../Misc/UserBadgeItem';
+import UserListItem from '../Misc/UserListItem';
+import ChatLoading from '../Misc/ChatLoading';
 
 const UpdateGroupChat = ({ setRefreshList }) => {
 	const [groupChatName, setGroupChatName] = useState('');

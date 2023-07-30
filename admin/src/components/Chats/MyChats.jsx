@@ -5,8 +5,8 @@ import { AddIcon } from '@chakra-ui/icons';
 
 import { ChatState } from '../../context/chatProvider';
 import { asyncWrap, getSender } from '../../utils';
-import ChatLoading from './ChatLoading';
 import GroupChatModal from './GroupChatModal';
+import ChatLoading from '../Misc/ChatLoading';
 
 const MyChats = ({ refreshList }) => {
 	const [loggedUser, setLoggedUser] = useState();

@@ -27,8 +27,8 @@ import { BellIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import { ChatState } from '../../context/chatProvider';
 import { asyncWrap } from '../../utils';
 import ProfileModal from '../Misc/ProfileModal';
-import ChatLoading from './ChatLoading';
-import UserListItem from './UserListItem';
+import ChatLoading from '../Misc/ChatLoading';
+import UserListItem from '../Misc/UserListItem';
 
 const SideDrawer = () => {
 	const [search, setSearch] = useState('');
