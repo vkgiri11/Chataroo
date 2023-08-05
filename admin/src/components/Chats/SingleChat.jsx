@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import io from 'socket.io-client';
 import { Box, FormControl, IconButton, Input, Spinner, Text, useToast } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 
@@ -8,6 +9,9 @@ import { asyncWrap, getSender, getSenderDetails } from '../../utils';
 import ProfileModal from '../Misc/ProfileModal';
 import UpdateGroupChat from './UpdateGroupChat';
 import ScrollableChat from './ScrollableChat';
+
+const SERVER = import.meta.env.VITE_SERVER;
+let socket;
 
 const SingleChat = ({ setRefreshList }) => {
 	const [messages, setMessages] = useState([]);
@@ -81,6 +85,10 @@ const SingleChat = ({ setRefreshList }) => {
 	useEffect(() => {
 		fetchMessages();
 	}, [selectedChat]);
+
+	useEffect(() => {
+		socket = io(SERVER);
+	}, []);
 
 	return (
 		<>

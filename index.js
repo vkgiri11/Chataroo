@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import { Server } from 'socket.io';
 
 import connectDB from './config/db.js';
 
@@ -28,4 +29,17 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => console.log(`Server Running on Port: http://localhost:${PORT}`));
+const server = app.listen(PORT, () =>
+	console.log(`Server Running on Port: http://localhost:${PORT}`)
+);
+
+const io = new Server(server, {
+	pingTimeout: 600000,
+	cors: {
+		origin: process.env.CLIENT_URL,
+	},
+});
+
+io.on('connection', (socket) => {
+	console.log("\x1b[35m", 'Connected to socket.io !!');
+});
