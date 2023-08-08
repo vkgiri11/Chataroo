@@ -17,6 +17,8 @@ const SingleChat = ({ setRefreshList }) => {
 	const [messages, setMessages] = useState([]);
 	const [newMessage, setNewMessage] = useState('');
 	const [loading, setLoading] = useState(false);
+	const [isTyping, setIsTyping] = useState(false);
+	const [endTyping, setEndTyping] = useState(false);
 	const [isSocketConnected, setIsSocketConnected] = useState(false);
 
 	const { user, selectedChat, setSelectedChat } = ChatState();
@@ -55,10 +57,32 @@ const SingleChat = ({ setRefreshList }) => {
 
 	const typingHandler = (e) => {
 		setNewMessage(e.target.value);
+
+		if (!isSocketConnected) return;
+
+		if (!endTyping) {
+			setEndTyping(true);
+			socket.emit('typing', selectedChat._id);
+		}
+
+		const lastTypingTime = new Date().getTime();
+		const typingTimeLimit = 3000;
+
+		setTimeout(() => {
+			const timeNow = new Date().getTime();
+			const timeDiff = timeNow - lastTypingTime;
+
+			if (timeDiff >= typingTimeLimit && endTyping) {
+				socket.emit('stop_typing', selectedChat._id);
+				setEndTyping(false);
+			}
+		}, typingTimeLimit);
 	};
 
 	const sendMessage = async (e) => {
 		if (e.key === 'Enter' && newMessage) {
+			socket.emit('stop_typing', selectedChat._id);
+
 			try {
 				setNewMessage('');
 
@@ -94,10 +118,9 @@ const SingleChat = ({ setRefreshList }) => {
 	useEffect(() => {
 		socket = io(SERVER);
 		socket.emit('setup', user._id);
-
-		socket.on('connection', () => {
-			setIsSocketConnected(true);
-		});
+		socket.on('connected', () => setIsSocketConnected(true));
+		socket.on('typing', () => setIsTyping(true));
+		socket.on('stop_typing', () => setIsTyping(false));
 	}, []);
 
 	useEffect(() => {
@@ -164,6 +187,7 @@ const SingleChat = ({ setRefreshList }) => {
 						)}
 
 						<FormControl onKeyDown={sendMessage} isRequired mt={3}>
+							{isTyping ? <>Loading...</> : <></>}
 							<Input
 								variant="filled"
 								bg="#E0E0E0"

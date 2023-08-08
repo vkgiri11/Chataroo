@@ -67,4 +67,7 @@ io.on('connection', (socket) => {
 			socket.in(item._id).emit('message_recieved', newMessage);
 		});
 	});
+
+  socket.on("typing", (room) => socket.in(room).emit("typing"));
+  socket.on("stop_typing", (room) => socket.in(room).emit("stop_typing"));
 });
