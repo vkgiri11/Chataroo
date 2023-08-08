@@ -3,9 +3,11 @@ import axios from 'axios';
 import io from 'socket.io-client';
 import { Box, FormControl, IconButton, Input, Spinner, Text, useToast } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
+import Lottie from 'react-lottie';
 
 import { ChatState } from '../../context/chatProvider';
 import { asyncWrap, getSender, getSenderDetails } from '../../utils';
+import animationData from '../../utils/typing.json';
 import ProfileModal from '../Misc/ProfileModal';
 import UpdateGroupChat from './UpdateGroupChat';
 import ScrollableChat from './ScrollableChat';
@@ -24,6 +26,15 @@ const SingleChat = ({ setRefreshList }) => {
 	const { user, selectedChat, setSelectedChat } = ChatState();
 
 	const toast = useToast();
+
+	const animationOps = {
+		loop: true,
+		autoplay: true,
+		animationData: animationData,
+		rendererSettings: {
+			preserveAspectRatio: 'xMidYMid slice',
+		},
+	};
 
 	const fetchMessages = async () => {
 		if (!selectedChat) return;
@@ -187,7 +198,11 @@ const SingleChat = ({ setRefreshList }) => {
 						)}
 
 						<FormControl onKeyDown={sendMessage} isRequired mt={3}>
-							{isTyping ? <>Loading...</> : <></>}
+							{isTyping ? (
+								<Lottie options={animationOps} height={35} width={70} style={{ margin: '15 0' }} />
+							) : (
+								<></>
+							)}
 							<Input
 								variant="filled"
 								bg="#E0E0E0"
