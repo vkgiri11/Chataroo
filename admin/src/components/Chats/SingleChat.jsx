@@ -11,12 +11,13 @@ import UpdateGroupChat from './UpdateGroupChat';
 import ScrollableChat from './ScrollableChat';
 
 const SERVER = import.meta.env.VITE_SERVER;
-let socket;
+let socket, selectedChatCompare;
 
 const SingleChat = ({ setRefreshList }) => {
 	const [messages, setMessages] = useState([]);
 	const [newMessage, setNewMessage] = useState('');
 	const [loading, setLoading] = useState(false);
+	const [isSocketConnected, setIsSocketConnected] = useState(false);
 
 	const { user, selectedChat, setSelectedChat } = ChatState();
 
@@ -36,6 +37,7 @@ const SingleChat = ({ setRefreshList }) => {
 			);
 
 			setMessages(res.data.data);
+			socket.emit('join_chat', selectedChat._id);
 		} catch (error) {
 			console.log(error);
 			toast({
@@ -67,6 +69,7 @@ const SingleChat = ({ setRefreshList }) => {
 					})
 				);
 
+				socket.emit('new_message', res.data.data);
 				setMessages((p) => [...p, res.data.data]);
 			} catch (error) {
 				console.log(error);
@@ -84,11 +87,29 @@ const SingleChat = ({ setRefreshList }) => {
 
 	useEffect(() => {
 		fetchMessages();
+
+		selectedChatCompare = selectedChat;
 	}, [selectedChat]);
 
 	useEffect(() => {
 		socket = io(SERVER);
+		socket.emit('setup', user._id);
+
+		socket.on('connection', () => {
+			setIsSocketConnected(true);
+		});
 	}, []);
+
+	useEffect(() => {
+		socket.on('message_recieved', (newRecievedMsg) => {
+			// if someone other than selected chat user sends a msg
+			if (!selectedChatCompare || selectedChatCompare._id !== newRecievedMsg.chat._id) {
+				// give a notification
+			} else {
+				setMessages([...messages, newRecievedMsg]);
+			}
+		});
+	});
 
 	return (
 		<>

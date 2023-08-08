@@ -41,5 +41,30 @@ const io = new Server(server, {
 });
 
 io.on('connection', (socket) => {
-	console.log("\x1b[35m", 'Connected to socket.io !!');
+	console.log('\x1b[35m', 'Connected to socket.io !!');
+
+	socket.on('setup', (id) => {
+		socket.join(id);
+		socket.emit('connected');
+	});
+
+	socket.on('join_chat', (room) => {
+		socket.join(room);
+		console.log('User Joined Room: ' + room);
+	});
+
+	socket.on('new_message', (newMessage) => {
+		const chat = newMessage.chat;
+
+		// chat.users -> all the recipients of the message
+		if (!chat.users) return console.log('No Recievers Defined !!');
+
+		chat.users.forEach((item) => {
+			// socket io will emit to all, including yourself.
+			// don't emit message to self
+			if (item._id === newMessage.sender._id) return;
+
+			socket.in(item._id).emit('message_recieved', newMessage);
+		});
+	});
 });
