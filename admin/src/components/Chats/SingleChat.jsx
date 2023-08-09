@@ -23,7 +23,7 @@ const SingleChat = ({ setRefreshList }) => {
 	const [endTyping, setEndTyping] = useState(false);
 	const [isSocketConnected, setIsSocketConnected] = useState(false);
 
-	const { user, selectedChat, setSelectedChat } = ChatState();
+	const { user, selectedChat, notification, setSelectedChat, setNotification } = ChatState();
 
 	const toast = useToast();
 
@@ -138,7 +138,10 @@ const SingleChat = ({ setRefreshList }) => {
 		socket.on('message_recieved', (newRecievedMsg) => {
 			// if someone other than selected chat user sends a msg
 			if (!selectedChatCompare || selectedChatCompare._id !== newRecievedMsg.chat._id) {
-				// give a notification
+				if (notification.includes(newRecievedMsg)) return;
+
+				setNotification([newRecievedMsg, ...notification]);
+				setRefreshList((p) => !p);
 			} else {
 				setMessages([...messages, newRecievedMsg]);
 			}

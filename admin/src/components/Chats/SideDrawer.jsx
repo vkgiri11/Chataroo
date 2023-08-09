@@ -23,9 +23,11 @@ import {
 	useToast,
 } from '@chakra-ui/react';
 import { BellIcon, ChevronDownIcon } from '@chakra-ui/icons';
+import NotificationBadge from 'react-notification-badge';
+import { Effect } from 'react-notification-badge';
 
 import { ChatState } from '../../context/chatProvider';
-import { asyncWrap } from '../../utils';
+import { asyncWrap, getSender } from '../../utils';
 import ProfileModal from '../Misc/ProfileModal';
 import ChatLoading from '../Misc/ChatLoading';
 import UserListItem from '../Misc/UserListItem';
@@ -37,7 +39,7 @@ const SideDrawer = () => {
 	const [loadingChat, setLoadingChat] = useState(false);
 
 	const navigateTo = useNavigate();
-	const { user, chats, setSelectedChat, setChats } = ChatState();
+	const { user, chats, notification, setSelectedChat, setChats, setNotification } = ChatState();
 
 	const toast = useToast();
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -129,9 +131,25 @@ const SideDrawer = () => {
 				<div>
 					<Menu>
 						<MenuButton p={1}>
+							<NotificationBadge count={notification.length} effect={Effect.SCALE} />
 							<BellIcon fontSize="2xl" m={1} />
 						</MenuButton>
-						{/* <MenuList></MenuList> */}
+						<MenuList pl={2}>
+							{!notification.length
+								? 'No New Messages'
+								: notification.map((item) => (
+										<MenuItem
+											key={item._id}
+											onClick={() => {
+												setSelectedChat(item.chat);
+												setNotification(notification.filter((elem) => elem !== item));
+											}}>
+											{item.chat.isGroupChat
+												? `New Message in ${item.chat.chatName}`
+												: `New Message from ${getSender(user, item.chat.users)}`}
+										</MenuItem>
+								  ))}
+						</MenuList>
 					</Menu>
 					<Menu>
 						<MenuButton as={Button} bg="white" rightIcon={<ChevronDownIcon />}>
