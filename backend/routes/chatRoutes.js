@@ -7,7 +7,7 @@ import {
 	fetchChats,
 	removeFromGroup,
 	renameGroupChat,
-} from '../controllers/chatController.js';
+} from '../backend/controllers/chatController.js.js';
 import authMiddleware from '../middleware/authMiddleWare.js';
 
 const router = express.Router();
