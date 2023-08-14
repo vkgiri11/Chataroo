@@ -1,6 +1,6 @@
 export function getUrl() {
-	if (process.env.NODE_ENV === 'development') {
-		return 'http://localhost:5000/api';
+	if (import.meta.env.VITE_NODE_ENV === 'production') {
+		return 'https://chataroo-backend.onrender.com/api/';
 	}
 	return `${window.location.origin}/api/`;
 }
