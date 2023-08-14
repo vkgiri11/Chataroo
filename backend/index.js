@@ -9,7 +9,7 @@ import userRoutes from './routes/userRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
 import messageRoutes from './routes/messageRoutes.js';
 
-import { errorHandler, notFound } from './middleware/errorMiddleware.js';
+import { errorHandler, notFoundHandler } from './middleware/errorMiddleware.js';
 
 const app = express();
 dotenv.config();
@@ -24,7 +24,7 @@ app.use('/api/user', userRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/message', messageRoutes);
 
-app.use(notFound);
+app.use(notFoundHandler);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
