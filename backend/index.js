@@ -9,7 +9,7 @@ import userRoutes from './routes/userRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
 import messageRoutes from './routes/messageRoutes.js';
 
-import { errorHandler, notFound } from './middleware/errorMiddleWare.js';
+import { errorHandler, notFound } from './middleware/errorMiddleware.js';
 
 const app = express();
 dotenv.config();
