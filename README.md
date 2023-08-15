@@ -1,8 +1,19 @@
-# Chataroo
+# Chat App
 
-A Full stack chat app with realtime messaging and notifications feature.
+Welcome to Chataroo! This application allows users to engage in real-time conversations, making communication quick and seamless. Whether you want to chat with friends, collaborate with colleagues, or connect with new people, Chataroo has got you covered.
 
 ## Features
-- Chat with any other user
-- Make groups with your friends, colleagues etc.
-- Notifications so that no message is missed
+- **Real-time Messaging** : Experience instant communication with real-time message updates.
+- **Group Chats** : Start group conversations with multiple participants for efficient discussions.
+- **Private Chats** : Have one-on-one private conversations with other users.
+- **Notifications** : Stay informed with in-app notifications for new messages and mentions.
+
+## Tech Stack
+
+Chataroo is built using the following technologies:
+
+- **Frontend** : React.js
+- **Backend** : Node.js, Express.js, Socket.io for real-time communication
+- **Database** : MongoDB for storing user profiles and chat history
+- **Authentication** : JWT (JSON Web Tokens) for secure user authentication
+- **Styling** : Chakra UI for responsive design
