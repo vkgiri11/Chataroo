@@ -1,4 +1,6 @@
-# Chat App
+# Chataroo
+
+![image](https://github.com/vkgiri11/Chataroo/assets/61221429/004693ba-8433-49bc-8e12-f9fc9ff40348)
 
 Welcome to Chataroo! This application allows users to engage in real-time conversations, making communication quick and seamless. Whether you want to chat with friends, collaborate with colleagues, or connect with new people, Chataroo has got you covered.
 
